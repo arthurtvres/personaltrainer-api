@@ -3,6 +3,7 @@ package com.personal.personalapi.controller;
 import com.personal.personalapi.dto.DietDTO;
 import com.personal.personalapi.model.Diet;
 import com.personal.personalapi.service.DietService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +20,7 @@ public class DietController {
     }
 
     @PostMapping
-    public ResponseEntity<Diet> create(@RequestBody DietDTO dietDTO) {
+    public ResponseEntity<Diet> create(@Valid @RequestBody DietDTO dietDTO) {
         Diet diet = dietService.save(dietDTO);
         return ResponseEntity.status(201).body(diet);
     }
@@ -27,18 +28,6 @@ public class DietController {
     @GetMapping
     public List<Diet> list() {
         return dietService.listAll();
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Diet> update(@PathVariable Long id, @RequestBody DietDTO dietDTO) {
-        Diet diet = dietService.update(id, dietDTO);
-        return ResponseEntity.ok(diet);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        dietService.delete(id);
-        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{id}")
@@ -51,8 +40,16 @@ public class DietController {
         return dietService.findByUserId(userId);
     }
 
-    @GetMapping("/user/{userId}/all")
-    public List<Diet> findAllByUserId(@PathVariable Long userId) {
-        return dietService.findAllByUserId(userId);
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Diet> update(@PathVariable Long id, @Valid @RequestBody DietDTO dietDTO) {
+        Diet diet = dietService.update(id, dietDTO);
+        return ResponseEntity.ok(diet);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        dietService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

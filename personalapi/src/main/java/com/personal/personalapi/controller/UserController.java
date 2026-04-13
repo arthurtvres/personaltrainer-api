@@ -3,7 +3,9 @@ package com.personal.personalapi.controller;
 import com.personal.personalapi.dto.UserDTO;
 import com.personal.personalapi.model.User;
 import com.personal.personalapi.service.UserService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -18,7 +20,7 @@ public class UserController
     }
 
     @PostMapping
-    public User createUser(@RequestBody UserDTO userDTO) {
+    public User createUser(@Valid @RequestBody UserDTO userDTO) {
         return userService.saveUser(userDTO);
     }
 
@@ -32,9 +34,9 @@ public class UserController
         return userService.getAllUsers();
     }
 
-    @DeleteMapping
-    public void deleteUser(@RequestParam Long id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
+        return ResponseEntity.noContent().build();
     }
-
 }

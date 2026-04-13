@@ -3,6 +3,7 @@ package com.personal.personalapi.controller;
 import com.personal.personalapi.dto.ExerciseDTO;
 import com.personal.personalapi.model.Exercise;
 import com.personal.personalapi.service.ExerciseService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +20,7 @@ public class ExerciseController {
     }
 
     @PostMapping
-    public ResponseEntity<Exercise> create(@RequestBody ExerciseDTO exerciseDTO) {
+    public ResponseEntity<Exercise> create(@Valid @RequestBody ExerciseDTO exerciseDTO) {
         Exercise exercise = exerciseService.save(exerciseDTO);
         return ResponseEntity.status(201).body(exercise);
     }
@@ -35,7 +36,7 @@ public class ExerciseController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Exercise> update(@PathVariable Long id, @RequestBody ExerciseDTO exerciseDTO) {
+    public ResponseEntity<Exercise> update(@PathVariable Long id, @Valid @RequestBody ExerciseDTO exerciseDTO) {
         Exercise exercise = exerciseService.update(id, exerciseDTO);
         return ResponseEntity.ok(exercise);
     }

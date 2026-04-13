@@ -3,6 +3,7 @@ package com.personal.personalapi.controller;
 import com.personal.personalapi.dto.WorkoutDTO;
 import com.personal.personalapi.model.Workout;
 import com.personal.personalapi.service.WorkoutService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +19,7 @@ public class WorkoutController {
     }
 
     @PostMapping
-    public ResponseEntity<Workout> create(@RequestBody WorkoutDTO workoutDTO) {
+    public ResponseEntity<Workout> create(@Valid  @RequestBody WorkoutDTO workoutDTO) {
         Workout workout = workoutService.save(workoutDTO);
         return ResponseEntity.status(201).body(workout);
     }
@@ -33,7 +34,7 @@ public class WorkoutController {
         return workoutService.findById(id);
     }
 
-    @GetMapping("/user/{userId}/all")
+    @GetMapping("/user/{userId}")
     public List<Workout> findAllByUserId(@PathVariable Long userId) {
         return workoutService.findAllByUserId(userId);
     }
