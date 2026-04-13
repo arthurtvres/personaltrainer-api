@@ -1,6 +1,5 @@
-# Personal Trainer API
-
-API RESTful desenvolvida com **Spring Boot** para gerenciamento de **usuários, treinos, exercícios e dietas**.
+# Corexa API
+API RESTful desenvolvida com Spring Boot para gerenciamento de usuários, treinos, exercícios e dietas
 
 ---
 
