@@ -12,7 +12,7 @@ O projeto segue uma **arquitetura em camadas**:
 * `com.personal.personalapi.repository` → acesso ao banco com Spring Data JPA
 * `com.personal.personalapi.model` → entidades JPA
 * `com.personal.personalapi.dto` → objetos de entrada para criação/atualização
-* `com.personal.personalapi.config` → configurações da aplicação (Swagger/OpenAPI)
+* `com.personal.personalapi.config` → configurações da aplicação (Swagger/OpenAPI e Segurança)
 
 ---
 
@@ -22,6 +22,7 @@ O projeto segue uma **arquitetura em camadas**:
 * Spring Boot 3.5.11
 * Spring Web
 * Spring Data JPA
+* Spring Security
 * PostgreSQL
 * Lombok
 * Springdoc OpenAPI (`springdoc-openapi-starter-webmvc-ui` 2.8.6)
@@ -43,8 +44,15 @@ Configuração atual:
 * URL atual:
   `jdbc:postgresql://localhost:5433/personaldb`
 * Estratégia do Hibernate: `update`
+* Credenciais do Spring Security (padrão): `admin` / `admin123`
 
 Ajuste usuário, senha e URL conforme o seu ambiente.
+
+---
+
+# Autenticação
+
+Atualmente os endpoints estão liberados em `SecurityConfig`, então não há login obrigatório para a API e o Swagger.
 
 ---
 
@@ -150,13 +158,13 @@ http://localhost:8080/v3/api-docs
 
 ## Workouts (`/workouts`)
 
-| Method | Endpoint                      | Descrição                     |
-| ------ | ----------------------------- | ----------------------------- |
-| POST   | `/workouts`                   | Create workout                |
-| GET    | `/workouts`                   | List workouts                 |
-| GET    | `/workouts/{id}`              | Get workout by id             |
-| GET    | `/workouts/user/{userId}/all` | List all workouts from a user |
-| DELETE | `/workouts/{id}`              | Delete workout                |
+| Method | Endpoint                  | Descrição                     |
+| ------ | ------------------------- | ----------------------------- |
+| POST   | `/workouts`               | Create workout                |
+| GET    | `/workouts`               | List workouts                 |
+| GET    | `/workouts/{id}`          | Get workout by id             |
+| GET    | `/workouts/user/{userId}` | List all workouts from a user |
+| DELETE | `/workouts/{id}`          | Delete workout                |
 
 ---
 
@@ -167,23 +175,22 @@ http://localhost:8080/v3/api-docs
 | POST   | `/exercises`                     | Create exercise               |
 | GET    | `/exercises`                     | List exercises                |
 | GET    | `/exercises/{id}`                | Get exercise by id            |
-| PUT    | `/exercises/{id}`                | Update exercise               |
 | GET    | `/exercises/workout/{workoutId}` | List exercises from a workout |
+| PUT    | `/exercises/{id}`                | Update exercise               |
 | DELETE | `/exercises/{id}`                | Delete exercise               |
 
 ---
 
 ## Diets (`/diets`)
 
-| Method | Endpoint                   | Descrição                  |
-| ------ | -------------------------- | -------------------------- |
-| POST   | `/diets`                   | Create diet                |
-| GET    | `/diets`                   | List diets                 |
-| GET    | `/diets/{id}`              | Get diet by id             |
-| PUT    | `/diets/{id}`              | Update diet                |
-| DELETE | `/diets/{id}`              | Delete diet                |
-| GET    | `/diets/user/{userId}`     | Get user's diet            |
-| GET    | `/diets/user/{userId}/all` | List all diets from a user |
+| Method | Endpoint               | Descrição       |
+| ------ | ---------------------- | --------------- |
+| POST   | `/diets`               | Create diet     |
+| GET    | `/diets`               | List diets      |
+| GET    | `/diets/{id}`          | Get diet by id  |
+| GET    | `/diets/user/{userId}` | Get user's diet |
+| PUT    | `/diets/{id}`          | Update diet     |
+| DELETE | `/diets/{id}`          | Delete diet     |
 
 ---
 
@@ -193,7 +200,7 @@ http://localhost:8080/v3/api-docs
 
 ```json
 {
-  "name": "João",
+  "name": "Joao",
   "email": "joao@email.com",
   "password": "123456",
   "role": "ALUNO"
@@ -207,7 +214,7 @@ http://localhost:8080/v3/api-docs
 ```json
 {
   "name": "Treino A",
-  "description": "Treino de peito e tríceps",
+  "description": "Treino de peito e triceps",
   "userId": 1
 }
 ```
@@ -219,7 +226,7 @@ http://localhost:8080/v3/api-docs
 ```json
 {
   "name": "Supino Reto",
-  "description": "Exercício com barra para peitoral",
+  "description": "Exercicio com barra para peitoral",
   "sets": 4,
   "reps": 10,
   "workoutId": 1
@@ -232,9 +239,9 @@ http://localhost:8080/v3/api-docs
 
 ```json
 {
-  "name": "Dieta Hipocalórica",
-  "description": "Redução de calorias para perda de peso",
-  "goal": "PERDA_DE_PESO",
+  "name": "Dieta Hipocalorica",
+  "description": "Reducao de calorias para perda de peso",
+  "goal": "WEIGHT_LOSS",
   "dailyCalories": 1800,
   "proteinGrams": 140,
   "carbGrams": 180,
@@ -248,7 +255,9 @@ http://localhost:8080/v3/api-docs
 # Observações
 
 * A senha do usuário não é retornada nas respostas (`@JsonIgnore` em `User.password`).
-* Alguns métodos podem lançar `RuntimeException` quando os dados não são encontrados.
+* Erros de validação retornam `400` e exibem a mensagem do DTO.
+* Erros de regra de negócio retornam `400` com mensagem descritiva.
+* Erros de recurso não encontrado retornam `404`.
 * A API segue **boas práticas REST**:
 
     * recursos em plural
