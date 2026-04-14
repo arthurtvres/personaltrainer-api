@@ -1,6 +1,7 @@
 package com.personal.personalapi.service;
 
 import com.personal.personalapi.dto.ExerciseDTO;
+import com.personal.personalapi.exception.ResourceNotFoundException;
 import com.personal.personalapi.model.Exercise;
 import com.personal.personalapi.model.Workout;
 import com.personal.personalapi.repository.ExerciseRepository;
@@ -25,7 +26,7 @@ public class ExerciseService {
 
     public Exercise save(ExerciseDTO exerciseDTO) {
         Workout workout = workoutRepository.findById(exerciseDTO.getWorkoutId())
-                .orElseThrow(() -> new RuntimeException("Workout not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Treino nao encontrado"));
 
         Exercise exercise = new Exercise();
         exercise.setName(exerciseDTO.getName());
@@ -39,10 +40,10 @@ public class ExerciseService {
 
     public Exercise update(Long id, ExerciseDTO exerciseDTO) {
         Exercise exercise = exerciseRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Exercise not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Exercicio nao encontrado"));
 
         Workout workout = workoutRepository.findById(exerciseDTO.getWorkoutId())
-                .orElseThrow(() -> new RuntimeException("Workout not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Treino nao encontrado"));
 
         exercise.setName(exerciseDTO.getName());
         exercise.setDescription(exerciseDTO.getDescription());
@@ -55,7 +56,7 @@ public class ExerciseService {
 
     public Exercise findById(Long id) {
         return exerciseRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Exercise not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Exercicio nao encontrado"));
     }
 
     public List<Exercise> findAllByWorkoutId(Long workoutId) {

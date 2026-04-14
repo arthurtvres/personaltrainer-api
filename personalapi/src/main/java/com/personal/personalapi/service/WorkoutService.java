@@ -1,6 +1,7 @@
 package com.personal.personalapi.service;
 
 import com.personal.personalapi.dto.WorkoutDTO;
+import com.personal.personalapi.exception.ResourceNotFoundException;
 import com.personal.personalapi.model.Workout;
 import com.personal.personalapi.model.User;
 import com.personal.personalapi.repository.WorkoutRepository;
@@ -25,7 +26,7 @@ public class WorkoutService {
 
     public Workout save(WorkoutDTO workoutDTO) {
         User user = userRepository.findById(workoutDTO.getUserId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario nao encontrado"));
 
         Workout workout = new Workout();
         workout.setName(workoutDTO.getName());
@@ -37,7 +38,7 @@ public class WorkoutService {
 
     public Workout findById(Long id) {
         return workoutRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Workout not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Treino nao encontrado"));
     }
 
     public List<Workout> findAllByUserId(Long userId) {

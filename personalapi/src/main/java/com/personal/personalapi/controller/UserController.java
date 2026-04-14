@@ -24,14 +24,14 @@ public class UserController
         return userService.saveUser(userDTO);
     }
 
-    @GetMapping("/{id}")
-    public User findUserById(@PathVariable Long id) {
-        return userService.findUserById(id);
-    }
-
     @GetMapping
     public List<User> getAllUsers() {
         return userService.getAllUsers();
+    }
+
+    @GetMapping("/{id}")
+    public User findUserById(@PathVariable Long id) {
+        return userService.findUserById(id);
     }
 
     @DeleteMapping("/{id}")

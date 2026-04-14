@@ -31,6 +31,6 @@ public enum DietGoal {
                 return goal;
             }
         }
-        throw new IllegalArgumentException("Invalid diet goal: " + value);
+        throw new IllegalArgumentException("Objetivo de dieta invalido: " + value);
     }
 }

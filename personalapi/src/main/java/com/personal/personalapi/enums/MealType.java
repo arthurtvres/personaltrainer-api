@@ -29,6 +29,6 @@ public enum MealType {
                 return mealType;
             }
         }
-        throw new IllegalArgumentException("Invalid meal type: " + value);
+        throw new IllegalArgumentException("Tipo de refeicao invalido: " + value);
     }
 }

@@ -35,15 +35,15 @@ public class ExerciseController {
         return exerciseService.findById(id);
     }
 
+    @GetMapping("/workout/{workoutId}")
+    public List<Exercise> findAllByWorkoutId(@PathVariable Long workoutId) {
+        return exerciseService.findAllByWorkoutId(workoutId);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<Exercise> update(@PathVariable Long id, @Valid @RequestBody ExerciseDTO exerciseDTO) {
         Exercise exercise = exerciseService.update(id, exerciseDTO);
         return ResponseEntity.ok(exercise);
-    }
-
-    @GetMapping("/workout/{workoutId}")
-    public List<Exercise> findAllByWorkoutId(@PathVariable Long workoutId) {
-        return exerciseService.findAllByWorkoutId(workoutId);
     }
 
     @DeleteMapping("/{id}")
@@ -52,4 +52,3 @@ public class ExerciseController {
         return ResponseEntity.noContent().build();
     }
 }
-
